@@ -1,13 +1,18 @@
-from os import path, getenv
-from urllib import urlparse
+# © 2025 Puneet Gopinath. All rights reserved.
+# Filename: src/server/app.py
+# License: MIT (see LICENSE)
+
+from os import path, getenv, remove
+from urllib.parse import urlparse
+from uuid import uuid4
 import asyncio
+import subprocess
 
 from zyte_api import AsyncZyteAPI
-from flask import Flask, jsonify, send_from_directory, request
+from flask import Flask, json, jsonify, send_from_directory, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 from scrapy.crawler import CrawlerProcess
-from ..webscraper.spiders import FetchUrlSpider
 
 load_dotenv()
 
@@ -27,6 +32,41 @@ def is_valid_url(url):
         return result.scheme in ["http", "https"] and bool(result.netloc)
     except Exception:
         return False
+
+def run_text_extract(url):
+    output_file = f"text_{uuid4()}.json"
+
+    result = subprocess.run(
+        ["scrapy", "crawl", "text_extract", "-a", f"start_url={url}", "-o", output_file],
+        capture_output=True,
+        text=True
+    )
+
+    if result.returncode != 0:
+        return { "error": "Text Extract Spider failed" }
+    
+    with open(output_file) as f:
+        data = json.load(f)
+    
+    remove(output_file)
+    return data
+
+def run_fetch_url(url):
+    output_file = f"output_{uuid4()}.json"
+    result = subprocess.run(
+        ["scrapy", "crawl", "fetch_url", "-a", f"start_url={url}", "-o", output_file],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        return { "error": "Fetch URL Spider failed" }
+    
+    with open(output_file) as f:
+        data = json.load(f)
+    
+    remove(output_file)
+    return data
 
 async def get_ss(URLs):
     client = AsyncZyteAPI()
@@ -55,33 +95,44 @@ def serve_index():
         return "Web Scraper Suite Backend is running on development mode."
     return send_from_directory(dist_path, "index.html")
 
-@app.route("/api/data", methods=["GET"])
-def get_data():
-    return jsonify({"message": "Hello from Python!"})
+@app.route("/livez", methods=["GET"])
+def health():
+    return jsonify({ "status": "OK" })
+
+@app.route("/api/text", methods=["POST"])
+def extract_text():
+    data = request.get_json()
+    url = data.get("url")
+
+    if not url:
+        return jsonify({ "error": "No URL Provided" }), 400
+    
+    if not is_valid_url(url):
+        return jsonify({ "error": "Invalid URL" }), 400
+    
+    data = run_text_extract(url)
+    if "error" in data:
+        return jsonify(data), 500
+    return jsonify(data)
 
 @app.route("/api/screenshot", methods=["POST"])
 def screenshot():
     data = request.get_json()
-    start_url=data.get("url")
+    start_url = data.get("url")
 
     if not start_url:
         return jsonify({ "error": "No URL Provided" }), 400
 
     if not is_valid_url(start_url):
         return jsonify({ "error": "Invalid URL" }), 400
+
+    data = run_fetch_url(start_url)
+    if "error" in data:
+        return jsonify(data), 500
     
-    scraped_items = []
-
-    def collect_urls(item, response, spider):
-        scraped_items.append(item)
-    
-    process.signals.connect(collect_urls, process.signals.item_scraped)
-
-    process.crawl(FetchUrlSpider, start_url=start_url)
-    process.start()
-
     extracted_urls = []
-    for item in scraped_items:
+
+    for item in data:
         extracted_urls.extend(item.get("links", []))
     extracted_urls = list(set(extracted_urls))
 
