@@ -31,7 +31,9 @@ export default function Screenshot() {
 
             if (res.status === 200) {
                 setData(res.data);
-                console.log("[INFO] Screnshots Fetched")
+                console.log("[INFO] Screnshots Fetched");
+                localStorage.setItem("coins", coins - reqCoins);
+                setCoins(c => c - reqCoins);
             } else {
                 setError(res.data.error);
                 console.error("[ERROR] An error occurred while fetching data:", res.data.error);
