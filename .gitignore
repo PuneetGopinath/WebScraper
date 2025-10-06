@@ -212,3 +212,4 @@ node_modules/
 
 # Output Files
 *.csv
+client-dist/
