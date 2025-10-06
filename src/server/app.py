@@ -86,12 +86,6 @@ async def get_ss(URLs):
                 return { "error": str(e) }
         return results
 
-@app.route("/")
-def serve_index():
-    if mode == "0":
-        return "Web Scraper Suite Backend is running on development mode."
-    return send_from_directory(dist_path, "index.html")
-
 @app.route("/livez", methods=["GET"])
 def health():
     return jsonify({ "status": "OK" })
@@ -117,6 +111,10 @@ def extract_text():
 def screenshot():
     body = request.get_json()
     start_url = body.get("url")
+    n = int(body.get("n", len(urls)))
+
+    if n <= 0 or n > 5:
+        return jsonify({ "error": "n must be between 1 and 5" }), 400
 
     if not start_url:
         return jsonify({ "error": "No URL Provided" }), 400
@@ -135,7 +133,6 @@ def screenshot():
     extracted_urls = list(set(extracted_urls))
 
     urls = [start_url] + extracted_urls
-    n = int(body.get("n", len(urls)))
 
     urls = urls[:n]
     
@@ -143,6 +140,22 @@ def screenshot():
     if all("error" in r for r in results):
         return jsonify(results), 500
     return jsonify(results)
+
+if mode == "1":
+    @app.route("/", defaults={"p": ""})
+    @app.route("/<path:p>")
+    def serve_react_app(p):
+        file_path = p and p.split("?")[0]
+        static_file_path = p and p if "." in p else None
+
+        full_path = path.join(dist_path, static_file_path) if static_file_path else None
+        if static_file_path and path.exists(full_path):
+            return send_from_directory(dist_path, static_file_path)
+        return send_from_directory(dist_path, "index.html")
+else:
+    @app.route("/")
+    def serve_index():
+        return "Web Scraper Suite Backend is running on development mode."
 
 if __name__ == "__main__":
     app.run(debug=True)
