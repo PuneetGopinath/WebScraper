@@ -42,6 +42,25 @@ main {
     transform: scale(1.05);
 }
 
+.screenshot-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.screenshot-container img {
+    max-width: 300px;
+}
+
+.error {
+    color: #F87171;
+    background-color: #FEF2F2;
+    border-color: #F87171;
+    padding: 10px;
+    border-radius: 8px;
+}
+
 footer {
     display: flex;
     flex-direction: column;
