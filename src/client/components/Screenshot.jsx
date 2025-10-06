@@ -4,7 +4,7 @@
  * License: MIT (see LICENSE)
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsCoin } from "react-icons/bs";
 import axios from "axios";
 
@@ -13,6 +13,8 @@ export default function Screenshot() {
     const [ data, setData ] = useState(null);
     const [ error, setError ] = useState(null);
 
+    const coinsPerS = 200;
+
     useEffect(() => {
         const currentCoins = parseInt(localStorage.getItem("coins"));
 
@@ -20,48 +22,59 @@ export default function Screenshot() {
         else localStorage.setItem("coins", 0);
     }, []);
 
-    const screenshot = async (n, url) => {
-        const reqCoins = n * 50;
+    const screenshot = async (e) => {
+        e.preventDefault();
+        
+        const n = document.getElementById("num").value;
+        const url = document.getElementById("url").value;
+        const reqCoins = n * coinsPerS;
         if (coins < reqCoins) {
-            return alert("Not enough coins!");
+            return alert(`Not enough coins! You need more ${reqCoins - coins} coins.`);
         }
 
         try {
             const res = await axios.post("/api/screenshot", { n, url });
 
             if (res.status === 200) {
+                console.log(res.data);
                 setData(res.data);
-                console.log("[INFO] Screnshots Fetched");
+                console.log("[INFO] Screenshots Fetched");
                 localStorage.setItem("coins", coins - reqCoins);
                 setCoins(c => c - reqCoins);
             } else {
+                if (res.status === 429)
+                    return setError("Status 429. Too Many Requests. Please wait for a while.")
                 setError(res.data.error);
                 console.error("[ERROR] An error occurred while fetching data:", res.data.error);
             }
-        } catch(e) {
-            setError(e);
-            console.error("[ERROR] Unable to send request to server:", e)
+        } catch(err) {
+            setError(err?.message || err);
+            console.error(`[ERROR] Unable to send request to server: ${err}, STATUS: ${err.status}`);
         }
     };
     return (
         <>
-            <h1>Get Screenshots of multiple pages!</h1>
+            <h2>Get Screenshots of multiple pages!</h2>
+            {error && <span className="error">Error: {error}</span>}
             <p>Do you know, when you provide a URL, this Web Scraper provides you with not only the screenshot of that particular URL, but also with the screenshots of the links present in the provided URL</p>
-            <p>Current Coins: {coins} <BsCoin /></p>
-            <br />
-            {error && <span>Error: {error}</span>}
+            <p>Coins: {coins} <BsCoin /></p>
             {!data &&
-                <>
-                <input type="text" id="url" required placeholder="Enter URL" />
-                <input type="number" id="num" required placeholder="Number of screenshots" />
-                <button onClick={() => screenshot(document.getElementById("num").value, document.getElementById("url").value)}>Get Screenshots!</button>
-                </>
+                <form onSubmit={screenshot}>
+                    <h5>NOTE: Rate limits are 2 requests per minute</h5>
+                    <input type="url" id="url" required placeholder="Enter URL" />
+                    <br />
+                    <input type="number" id="num" required placeholder="Number of screenshots" />
+                    <br />
+                    <button type="submit">Get Screenshots!</button>
+                </form>
             }
-            {data && data.map((item, index) => (
-                <div key={index}>
-                    <img src={`data:image/png;base64,${item.screenshot}`} alt="Screenshot" />
-                </div>
-            ))}
+            {data && data.map((item, index) => {
+                const src = `data:image/jpeg;base64,${item.screenshot}`;
+                return (<div key={index}>
+                    <img src={src} alt={`Screenshot of ${item.url}`} />
+                    <a href={src} download={`screenshot_${item.url}.jpeg`}>Download Image</a>
+                </div>);
+            })}
             <p>(Note: This is a simple MVP. Your coins will reset if you clear browser data.)</p>
         </>
     );
