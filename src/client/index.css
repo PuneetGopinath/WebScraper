@@ -1,5 +1,24 @@
+/**
+ * © 2025 Puneet Gopinath. All rights reserved.
+ * Filename: src/client/index.css
+ * License: MIT (see LICENSE)
+*/
+
 * {
     box-sizing: border-box;
+}
+
+.header {
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #333;
 }
 
 main {
@@ -12,4 +31,28 @@ main {
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
+    margin: 1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 2rem 0.5rem;
+}
+
+footer p {
+    margin: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
 }
