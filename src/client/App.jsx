@@ -10,6 +10,7 @@ import Layout from "./components/Layout";
 import Home from "./components/Home";
 import Game from "./components/Game";
 import Screenshot from "./components/Screenshot";
+import Text from "./components/Text";
 
 export default function App() {
     return (
@@ -19,6 +20,10 @@ export default function App() {
                     <Route index element={<Home />} />
                     <Route path="game" element={<Game />} />
                     <Route path="ss" element={<Screenshot />} />
+                    <Route path="text" element={<Text />} />
+                </Route>
+                <Route>
+                    <Route path="*" element={<h2>404: Page Not Found</h2>} />
                 </Route>
             </Routes>
         </BrowserRouter>
