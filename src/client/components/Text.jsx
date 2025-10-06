@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { BsCoin } from "react-icons/bs";
 
 export default function Text() {
@@ -23,6 +24,7 @@ export default function Text() {
 
     const extract = async (e) => {
         e.preventDefault();
+        setError(null);
         
         const url = document.getElementById("url").value;
         const reqCoins = coinsPerE;
@@ -57,10 +59,11 @@ export default function Text() {
             <p>Coins: {coins} <BsCoin /></p>
             <br />
             {!data &&
-                <form>
+                <form onSubmit={extract}>
                     <h5>NOTE: Rate limits are 10 requests per minute</h5>
                     <input type="url" id="url" required placeholder />
-                    <button onClick={extract}>Extract Text</button>
+                    <br />
+                    <button type="submit">Extract Text</button>
                 </form>
             }
             {data && data.map((item, index) => (
