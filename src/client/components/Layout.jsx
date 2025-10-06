@@ -9,7 +9,7 @@ import { Outlet } from "react-router";
 export default function Layout() {
     return (
         <>
-            <header>
+            <header className="header">
                 <h1>Web Scraper Suite</h1>
             </header>
             <main>
@@ -17,7 +17,7 @@ export default function Layout() {
             </main>
             <footer>
                 <p>Puneet Gopinath &copy; 2025</p>
-                <p>Credits to font-awesome as we have used their icons to display the symbol for coins.</p>
+                <p>Credits to bootstrap-icons as we have used their icons to display the symbol for coins.</p>
             </footer>
         </>
     );
