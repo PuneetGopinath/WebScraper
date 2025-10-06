@@ -45,7 +45,7 @@ export default function Text() {
                 console.error("[ERROR] An error occurred while fetching data:", res.data.error);
             }
         } catch(err) {
-            setError(err);
+            setError(err?.message || err);
             console.error("[ERROR] Unable to send request to server:", err);
         }
     };
@@ -53,7 +53,7 @@ export default function Text() {
     return (
         <>
             <h2>Extract Text from Web Pages</h2>
-            <p>{error && <span>Error: {error}</span>}</p>
+            <p>{error && <span className="error">Error: {error}</span>}</p>
             <p>Coins: {coins} <BsCoin /></p>
             <br />
             {!data &&
