@@ -8,16 +8,20 @@ from uuid import uuid4
 import asyncio
 import subprocess
 
-from zyte_api import AsyncZyteAPI
+from zyte_api import AsyncZyteAPI, RequestError
 from flask import Flask, json, jsonify, send_from_directory, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_cors import CORS
 from dotenv import load_dotenv
 from scrapy.crawler import CrawlerProcess
+import validators
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+limiter = Limiter(get_remote_address, app=app, default_limits=["10 per minute"])
 
 dist_path = path.join(path.dirname(__file__), "..", "client-dist")
 mode = getenv("PROD", "0")
@@ -25,13 +29,6 @@ mode = getenv("PROD", "0")
 process = CrawlerProcess(settings={
     "LOG_LEVEL": mode == "1" and "ERROR" or "DEBUG"
 })
-
-def is_valid_url(url):
-    try:
-        result = urlparse(url)
-        return result.scheme in ["http", "https"] and bool(result.netloc)
-    except Exception:
-        return False
 
 def run_text_extract(url):
     output_file = f"text_{uuid4()}.json"
@@ -107,7 +104,7 @@ def extract_text():
     if not url:
         return jsonify({ "error": "No URL Provided" }), 400
     
-    if not is_valid_url(url):
+    if not validators.url(url):
         return jsonify({ "error": "Invalid URL" }), 400
     
     data = run_text_extract(url)
@@ -116,18 +113,19 @@ def extract_text():
     return jsonify(data)
 
 @app.route("/api/screenshot", methods=["POST"])
+@limiter.limit("2 per minute")
 def screenshot():
-    data = request.get_json()
-    start_url = data.get("url")
+    body = request.get_json()
+    start_url = body.get("url")
 
     if not start_url:
         return jsonify({ "error": "No URL Provided" }), 400
 
-    if not is_valid_url(start_url):
+    if not validators.url(start_url):
         return jsonify({ "error": "Invalid URL" }), 400
 
     data = run_fetch_url(start_url)
-    if "error" in data:
+    if any("error" in item for item in data):
         return jsonify(data), 500
     
     extracted_urls = []
@@ -137,12 +135,12 @@ def screenshot():
     extracted_urls = list(set(extracted_urls))
 
     urls = [start_url] + extracted_urls
-    n = data.get("n", len(urls))
+    n = body.get("n", len(urls))
 
-    urls = urls[:n]
+    urls = urls[0:n]
     
     results = asyncio.run(get_ss(urls))
-    if "error" in results:
+    if all("error" in r for r in results):
         return jsonify(results), 500
     return jsonify(results)
 
