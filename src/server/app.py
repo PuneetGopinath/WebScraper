@@ -135,9 +135,9 @@ def screenshot():
     extracted_urls = list(set(extracted_urls))
 
     urls = [start_url] + extracted_urls
-    n = body.get("n", len(urls))
+    n = int(body.get("n", len(urls)))
 
-    urls = urls[0:n]
+    urls = urls[:n]
     
     results = asyncio.run(get_ss(urls))
     if all("error" in r for r in results):
