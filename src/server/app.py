@@ -88,6 +88,7 @@ async def get_ss(URLs):
         return results
 
 @app.route("/livez", methods=["GET"])
+@limiter.exempt
 def health():
     return jsonify({ "status": "OK" })
 
