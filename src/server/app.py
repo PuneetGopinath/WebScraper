@@ -25,6 +25,7 @@ limiter = Limiter(get_remote_address, app=app, default_limits=["10 per minute"])
 
 dist_path = path.join(path.dirname(__file__), "..", "client-dist")
 mode = getenv("PROD", "0")
+port = int(getenv("PORT", 5000))
 
 process = CrawlerProcess(settings={
     "LOG_LEVEL": mode == "1" and "ERROR" or "DEBUG"
@@ -161,4 +162,4 @@ else:
         return "Web Scraper Suite Backend is running on development mode."
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=port)
