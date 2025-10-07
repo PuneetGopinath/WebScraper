@@ -63,7 +63,7 @@ export default function Text() {
                     <h5>NOTE: Rate limits are 10 requests per minute</h5>
                     <input type="url" id="url" required placeholder />
                     <br />
-                    <button type="submit">Extract Text</button>
+                    <button type="submit" className="btn">Extract Text</button>
                 </form>
             }
             {data && data.map((item, index) => (
