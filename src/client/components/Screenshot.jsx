@@ -33,6 +33,10 @@ export default function Screenshot() {
             return alert(`Not enough coins! You need more ${reqCoins - coins} coins.`);
         }
 
+        if (n > 5) {
+            return alert("You can request a maximum of 5 screenshots at a time. This is to manage server load.")
+        }
+
         try {
             const res = await axios.post("/api/screenshot", { n, url });
 
