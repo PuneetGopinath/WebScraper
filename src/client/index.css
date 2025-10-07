@@ -8,22 +8,79 @@
     box-sizing: border-box;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .header {
-    text-align: center;
+    display: flex;
+    align-items: center;
     background-color: #f8f9fa;
     padding: 0.5rem 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding-block: 8px;
+    top: 0;
+    z-index: 10;
 }
 
 .header h1 {
     margin: 0;
-    font-size: 2rem;
-    color: #333;
+}
+
+.brand a {
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #1a1a1a;
+    margin-right: 1rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.25rem;
+    margin-left: auto;
+    margin-right: 0.5rem;
+}
+
+.nav-links a,
+.nav-links button {
+    font-weight: 500;
+    color: #444;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.nav-links a:hover,
+.nav-links button:hover {
+    color: #0077ff;
 }
 
 main {
     padding: 20px;
     font-family: Arial, sans-serif;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="number"] {
+    width: 75%;
+    padding: 1rem;
+    margin: 0.5rem 0 1rem 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
 }
 
 .btn {
@@ -33,6 +90,7 @@ main {
     color: white;
     margin: 1rem;
     text-decoration: none;
+    border: none;
     border-radius: 8px;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -47,10 +105,23 @@ main {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 20px;
+    justify-content: center;
+    margin-top: 1rem;
 }
 
 .screenshot-container img {
     max-width: 300px;
+    height: auto;
+}
+
+.screenshot-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.screenshot-item a {
+    text-align: center;
+    margin-top: 10px;
 }
 
 .error {
@@ -61,15 +132,16 @@ main {
     border-radius: 8px;
 }
 
-footer {
+.footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
     padding: 1rem 2rem 0.5rem;
+    background-color: #f1f3f6;
 }
 
-footer p {
+.footer p {
     margin: 0;
     text-align: center;
     font-size: 0.9rem;
