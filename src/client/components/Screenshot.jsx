@@ -24,6 +24,7 @@ export default function Screenshot() {
 
     const screenshot = async (e) => {
         e.preventDefault();
+        setError(null);
         
         const n = document.getElementById("num").value;
         const url = document.getElementById("url").value;
@@ -65,17 +66,18 @@ export default function Screenshot() {
                     <br />
                     <input type="number" id="num" required placeholder="Number of screenshots" />
                     <br />
-                    <button type="submit">Get Screenshots!</button>
+                    <button type="submit" className="btn">Get Screenshots!</button>
                 </form>
             }
-            {data && data.map((item, index) => {
-                const src = `data:image/jpeg;base64,${item.screenshot}`;
-                return (<div key={index}>
-                    <img src={src} alt={`Screenshot of ${item.url}`} />
-                    <a href={src} download={`screenshot_${item.url}.jpeg`}>Download Image</a>
-                </div>);
-            })}
-            <p>(Note: This is a simple MVP. Your coins will reset if you clear browser data.)</p>
+            <div className="screenshot-container">
+                {data && data.map((item, index) => {
+                    const src = `data:image/jpeg;base64,${item.screenshot}`;
+                    return (<div key={index} className="screenshot-item">
+                        <img src={src} alt={`Screenshot of ${item.url}`} />
+                        <a className="btn" href={src} download={`screenshot_${item.url}.jpeg`}>Download Image</a>
+                    </div>);
+                })}
+            </div>
         </>
     );
 };
