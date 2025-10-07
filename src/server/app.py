@@ -111,7 +111,7 @@ def extract_text():
 def screenshot():
     body = request.get_json()
     start_url = body.get("url")
-    n = int(body.get("n", len(urls)))
+    n = int(body.get("n", 0.5))
 
     if n <= 0 or n > 5:
         return jsonify({ "error": "n must be between 1 and 5" }), 400
@@ -135,6 +135,9 @@ def screenshot():
     urls = [start_url] + extracted_urls
 
     urls = urls[:n]
+
+    if n == 0.5:
+        n = len(urls)
     
     results = asyncio.run(get_ss(urls))
     if all("error" in r for r in results):
