@@ -42,7 +42,7 @@ def run_text_extract(url):
     if result.returncode != 0:
         return { "error": "Text Extract Spider failed" }
     
-    with open(output_file) as f:
+    with open(output_file, encoding="utf-8") as f:
         data = json.load(f)
     
     remove(output_file)
@@ -59,7 +59,7 @@ def run_fetch_url(url):
     if result.returncode != 0:
         return { "error": "Fetch URL Spider failed" }
     
-    with open(output_file) as f:
+    with open(output_file, encoding="utf-8") as f:
         data = json.load(f)
     
     remove(output_file)
