@@ -15,7 +15,7 @@ class TextExtractSpider(scrapy.Spider):
             raise ValueError("A start_url must be provided.")
 
     def parse(self, response):
-        texts = response.css("body *::text").getall()
+        texts = response.xpath("//body//*[not(self::script or self::style)]//text()").getall()
         content = " ".join(t.strip() for t in texts if t.strip())
 
         yield {
