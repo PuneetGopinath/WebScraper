@@ -41,7 +41,8 @@ class WebscraperSpiderMiddleware:
         # (from other spider middleware) raises an exception.
 
         # Should return either None or an iterable of Request or item objects.
-        pass
+        #pass
+        console.error("[ERROR] Exception raised during crawling:", exception);
 
     async def process_start(self, start):
         # Called with an async iterator over the spider start() method or the
@@ -50,7 +51,7 @@ class WebscraperSpiderMiddleware:
             yield item_or_request
 
     def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+        spider.logger.info("[INFO] Spider opened: %s" % spider.name)
 
 
 class WebscraperDownloaderMiddleware:
@@ -97,4 +98,4 @@ class WebscraperDownloaderMiddleware:
         pass
 
     def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+        spider.logger.info("[INFO] Spider opened: %s" % spider.name)
