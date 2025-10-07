@@ -53,7 +53,7 @@ export default function Text() {
     };
 
     return (
-        <>
+        <div className="main-container">
             <h2>Extract Text from Web Pages</h2>
             <p>{error && <span className="error">Error: {error}</span>}</p>
             <p>Coins: {coins} <BsCoin /></p>
@@ -69,6 +69,6 @@ export default function Text() {
             {data && data.map((item, index) => (
                 <div key={index}>{item.text}</div>
             ))}
-        </>
+        </div>
     );
 };

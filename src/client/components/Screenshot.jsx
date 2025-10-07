@@ -58,7 +58,7 @@ export default function Screenshot() {
         }
     };
     return (
-        <>
+        <div className="main-container">
             <h2>Get Screenshots of multiple pages!</h2>
             {error && <span className="error">Error: {error}</span>}
             <p>Do you know, when you provide a URL, this Web Scraper provides you with not only the screenshot of that particular URL, but also with the screenshots of the links present in the provided URL</p>
@@ -82,6 +82,6 @@ export default function Screenshot() {
                     </div>);
                 })}
             </div>
-        </>
+        </div>
     );
 };

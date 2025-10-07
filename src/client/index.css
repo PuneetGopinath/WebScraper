@@ -65,6 +65,13 @@ main {
     font-family: Arial, sans-serif;
 }
 
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -97,6 +104,25 @@ input[type="number"] {
 
 .btn:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.coin-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f0ad4e;
+    color: white;
+    margin: 1rem;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 1.5rem;
+    align-self: center;
+}
+
+.coin-button:hover {
+    background-color: #ec971f;
     transform: scale(1.05);
 }
 

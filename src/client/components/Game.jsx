@@ -17,10 +17,10 @@ export default function Game() {
     };
 
     return (
-        <>
+        <div className="main-container">
             <h1>Simple Clicker Game</h1>
             <h5>Click the button to earn coins!</h5>
-            <button onClick={handleClick}>Click me!</button>
+            <button onClick={handleClick} className="coin-button"><BsCoin /></button>
             <p>You can use the coins you earn to access web scraping features.</p>
             <br />
             <h5>Current Coins: {coins} <BsCoin /></h5>
@@ -28,6 +28,6 @@ export default function Game() {
             <h5>100 coins per text extraction.</h5>
             <Link to="/ss" className="btn">Get Screenshots!</Link>
             <Link to="/text" className="btn">Extract Text!</Link>
-        </>
+        </div>
     );
 };
