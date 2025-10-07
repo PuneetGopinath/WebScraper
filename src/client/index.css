@@ -150,6 +150,18 @@ input[type="number"] {
     margin-top: 10px;
 }
 
+.text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 800px;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
 .error {
     color: #F87171;
     background-color: #FEF2F2;

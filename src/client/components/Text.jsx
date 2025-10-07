@@ -66,9 +66,11 @@ export default function Text() {
                     <button type="submit" className="btn">Extract Text</button>
                 </form>
             }
-            {data && data.map((item, index) => (
-                <div key={index}>{item.content}</div>
-            ))}
+            {data && <div className="text-container">
+                {data.map((item, index) => (
+                    <span key={index}>{item.content}</span>
+                ))}
+            </div>}
         </div>
     );
 };
