@@ -25,6 +25,7 @@ export default function Home() {
             </p>
             <br />
             <h2>PLEASE DON'T PLAY TOO MUCH WITH THE TOOLS, I HAVE JUST 5$ FREE CREDITS IN ZYTE API</h2>
+            <h2>CHILL, I DIDN'T MEAN DON'T USE IT. I JUST MEAN DON'T RUN ANY JAVASCRIPT CODE IN THE CONSOLE</h2>
 
             <p>But to use this, I've developed a clicker game that allows users to get coins and then spend them on using the features of the web scraper.<br />This step is taken to avoid rate limiting issues if users try to mass scrape pages.</p>
             <br />
