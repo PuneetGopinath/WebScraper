@@ -69,7 +69,6 @@ export default function Text() {
             {data && data.map((item, index) => (
                 <div key={index}>{item.text}</div>
             ))}
-            <p>(Note: This is a simple MVP. Your coins will reset if you clear browser data.)</p>
         </>
     );
 };
