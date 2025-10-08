@@ -73,6 +73,7 @@ export default function Screenshot() {
                     <h5>NOTE: Rate limits are 2 requests per minute</h5>
                     <input type="url" id="url" required placeholder="Enter URL" />
                     <br />
+                    <label for="num"><small>Note: The more number of screenshots, the greater time it consumes. 1 screenshot consumes about 30 seconds</small></label>
                     <input type="number" id="num" required placeholder="Number of screenshots" />
                     <br />
                     <button type="submit" className="btn" disabled={loading}>Get Screenshots!</button>
