@@ -107,6 +107,13 @@ input[type="number"] {
     transform: scale(1.05);
 }
 
+.btn:disabled,
+.btn[disabled] {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .coin-button {
     display: inline-block;
     padding: 10px 20px;
