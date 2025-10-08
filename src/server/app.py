@@ -20,12 +20,19 @@ import validators
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
 limiter = Limiter(get_remote_address, app=app, default_limits=["10 per minute"])
 
 dist_path = path.join(path.dirname(__file__), "..", "client-dist")
 mode = getenv("PROD", "0")
 port = int(getenv("PORT", 5000))
+
+if mode == "0":
+    client_port = getenv("CLIENT_PORT", "5173")
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": f"http://localhost:{client_port}"}}, 
+        supports_credentials=True
+    )
 
 process = CrawlerProcess(settings={
     "LOG_LEVEL": mode == "1" and "ERROR" or "DEBUG"
