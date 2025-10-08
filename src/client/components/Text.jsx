@@ -31,6 +31,7 @@ export default function Text() {
         const url = document.getElementById("url").value;
         const reqCoins = coinsPerE;
         if (coins < reqCoins) {
+            setLoading(false);
             return alert(`Not enough coins! You need more ${reqCoins - coins} coins`);
         }
 

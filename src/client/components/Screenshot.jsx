@@ -32,11 +32,13 @@ export default function Screenshot() {
         const url = document.getElementById("url").value;
         const reqCoins = n * coinsPerS;
         if (coins < reqCoins) {
+            setLoading(false);
             return alert(`Not enough coins! You need more ${reqCoins - coins} coins.`);
         }
 
-        if (n > 5) {
-            return alert("You can request a maximum of 5 screenshots at a time. This is to manage server load.")
+        if (n <=0 || n > 5) {
+            setLoading(false);
+            return alert("You can request a minimum of 1 and maximum of 5 screenshots at a time. This is to manage server load.")
         }
 
         try {
@@ -73,7 +75,7 @@ export default function Screenshot() {
                     <h5>NOTE: Rate limits are 2 requests per minute</h5>
                     <input type="url" id="url" required placeholder="Enter URL" />
                     <br />
-                    <label for="num"><small>Note: The more number of screenshots, the greater time it consumes. 1 screenshot consumes about 30 seconds</small></label>
+                    <label htmlFor="num"><small>Note: The more number of screenshots, the greater time it consumes. 1 screenshot consumes about 30 seconds</small></label>
                     <input type="number" id="num" required placeholder="Number of screenshots" />
                     <br />
                     <button type="submit" className="btn" disabled={loading}>Get Screenshots!</button>
