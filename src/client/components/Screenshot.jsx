@@ -59,7 +59,7 @@ export default function Screenshot() {
                 console.error(res);
             }
         } catch(err) {
-            setError(err?.message || err);
+            setError(err?.response?.data || err?.message || err);
             setLoading(false);
             console.error(`[ERROR] Unable to send request to server: ${err}, STATUS: ${err.status}`);
         }

@@ -52,7 +52,7 @@ export default function Text() {
                 console.error(res);
             }
         } catch(err) {
-            setError(err?.message || err);
+            setError(err?.response?.data || err?.message || err);
             setLoading(false);
             console.error("[ERROR] Unable to send request to server:", err);
         }
