@@ -48,6 +48,7 @@ export default function Text() {
                     return setError("Status 429. Too Many Requests. Please wait for a while");
                 setError(res.data.error);
                 console.error("[ERROR] An error occurred while fetching data:", res.data.error);
+                console.error(res);
             }
         } catch(err) {
             setError(err?.message || err);
