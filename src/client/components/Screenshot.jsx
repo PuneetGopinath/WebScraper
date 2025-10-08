@@ -10,6 +10,7 @@ import axios from "axios";
 
 export default function Screenshot() {
     const [ coins, setCoins ] = useState(0);
+    const [ loading, setLoading ] = useState(false);
     const [ data, setData ] = useState(null);
     const [ error, setError ] = useState(null);
 
@@ -24,6 +25,7 @@ export default function Screenshot() {
 
     const screenshot = async (e) => {
         e.preventDefault();
+        setLoading(true);
         setError(null);
         
         const n = document.getElementById("num").value;
@@ -40,6 +42,7 @@ export default function Screenshot() {
         try {
             const res = await axios.post("/api/screenshot", { n, url });
 
+            setLoading(false);
             if (res.status === 200) {
                 console.log(res.data);
                 setData(res.data);
@@ -54,6 +57,7 @@ export default function Screenshot() {
             }
         } catch(err) {
             setError(err?.message || err);
+            setLoading(false);
             console.error(`[ERROR] Unable to send request to server: ${err}, STATUS: ${err.status}`);
         }
     };
@@ -70,7 +74,7 @@ export default function Screenshot() {
                     <br />
                     <input type="number" id="num" required placeholder="Number of screenshots" />
                     <br />
-                    <button type="submit" className="btn">Get Screenshots!</button>
+                    <button type="submit" className="btn" disabled={loading}>Get Screenshots!</button>
                 </form>
             }
             <div className="screenshot-container">

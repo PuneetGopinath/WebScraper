@@ -10,6 +10,7 @@ import { BsCoin } from "react-icons/bs";
 
 export default function Text() {
     const [ coins, setCoins ] = useState(0);
+    const [ loading, setLoading ] = useState(false);
     const [ data, setData ] = useState(null);
     const [ error, setError ] = useState(null);
 
@@ -25,6 +26,7 @@ export default function Text() {
     const extract = async (e) => {
         e.preventDefault();
         setError(null);
+        setLoading(true);
         
         const url = document.getElementById("url").value;
         const reqCoins = coinsPerE;
@@ -35,6 +37,7 @@ export default function Text() {
         try {
             const res = await axios.post("/api/text", { url });
 
+            setLoading(false);
             if (res.status === 200) {
                 setData(res.data);
                 console.log("[INFO] Text Extraction complete.");
@@ -48,6 +51,7 @@ export default function Text() {
             }
         } catch(err) {
             setError(err?.message || err);
+            setLoading(false);
             console.error("[ERROR] Unable to send request to server:", err);
         }
     };
@@ -63,7 +67,7 @@ export default function Text() {
                     <h5>NOTE: Rate limits are 10 requests per minute</h5>
                     <input type="url" id="url" required placeholder="Enter URL" />
                     <br />
-                    <button type="submit" className="btn">Extract Text</button>
+                    <button type="submit" className="btn" disabled={loading}>Extract Text</button>
                 </form>
             }
             {data && <div className="text-container">
